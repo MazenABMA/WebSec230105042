@@ -26,4 +26,45 @@ if (!function_exists('isPrime')) {
         return true;
     }
 }
+
+
+
+
+if (!function_exists('factorial')) {
+
+
+    function factorial($n) {
+
+
+        if ($n < 0) { //negative number error handling
+
+
+            return "undefined";
+
+
+        }
+
+
+
+
+
+        if ($n <= 1) { // (if its a 0 or a 1)
+
+
+            return 1;
+
+
+        }
+
+
+
+
+
+        return $n * factorial($n - 1);
+
+
+    }
+
+
+}
 ?>
