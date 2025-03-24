@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\ProductsController;
+use App\Http\Controllers\Web\ProducController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\GradeController;
 use App\Http\Controllers\Web\UsersController;
+
 
 
 // ✅ Homepage Route
@@ -48,10 +49,10 @@ Route::prefix('pages')->group(function () {
         return view('calculator');
     })->name('calculator');
 
-    Route::get('/products', [ProductsController::class, 'list'])->name('products_list');
-    Route::get('/products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
-    Route::post('/products/save/{product?}', [ProductsController::class, 'save'])->name('products_save');
-    Route::delete('/products/{product}', [ProductsController::class, 'delete'])->name('products_delete');
+    Route::get('/products', [ProducController::class, 'list'])->name('products_list');
+    Route::get('/products/edit/{product?}', [ProducController::class, 'edit'])->name('products_edit');
+    Route::post('/products/save/{product?}', [ProducController::class, 'save'])->name('products_save');
+    Route::delete('/products/{product}', [ProducController::class, 'delete'])->name('products_delete');
 
 
 Route::get('/users', [UserController::class, 'index'])->name('users_list');

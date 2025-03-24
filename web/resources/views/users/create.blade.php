@@ -38,13 +38,8 @@
             </div>
 
             <!-- Role Selection -->
-            <div class="mb-3">
-                <label class="form-label">Role:</label>
-                <select name="role" class="form-select" required>
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
+        <!-- Only allow admins to create employees -->
+<input type="hidden" name="role" value="employee">
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Save</button>

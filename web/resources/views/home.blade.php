@@ -17,53 +17,50 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('minitest') }}">MiniTest</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('transcript') }}">Transcript</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('calculator') }}">Calculator</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('gpa.calculator') }}">GPA Calculator</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('products_list') }}">Products</a>
-                </li>
-                <!-- New Links for Users and Grades -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users_list') }}">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('grades.index') }}">Grades</a>
-                </li>
-            </ul>
+@auth
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url('/') }}">
+                {{ config('app.name', 'Laravel') }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto">
-                <!-- Authentication Links -->
-                @guest
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link" href="{{ route('minitest') }}">MiniTest</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="nav-link" href="{{ route('transcript') }}">Transcript</a>
                     </li>
-                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('calculator') }}">Calculator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('gpa.calculator') }}">GPA Calculator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('products_list') }}">Products</a>
+                    </li>
+
+                    <!-- Show Users link only to Admins & Employees -->
+                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'employee')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users_list') }}">Users</a>
+                        </li>
+                    @endif
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('grades.index') }}">Grades</a>
+                    </li>
+                </ul>
+
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
@@ -81,14 +78,21 @@
                             </form>
                         </div>
                     </li>
-                @endguest
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<main class="py-4">
-    @yield('content')
-</main>
+    <main class="py-4">
+        @yield('content')
+    </main>
+@endauth
+
+@guest
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <h2>Please <a href="{{ route('login') }}">Login</a> to access this page.</h2>
+    </div>
+@endguest
+
 </body>
 </html>

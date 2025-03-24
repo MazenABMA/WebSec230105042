@@ -18,44 +18,49 @@ class UsersController extends Controller
         return view('auth.register');
     }
 
-    // Handle the registration logic
     public function doRegister(Request $request)
     {
-        // Validate manually for password match and missing fields
+        // Check if passwords match
         if ($request->password != $request->password_confirmation) {
             return redirect()->route('register')->with('error', 'Confirm password does not match.');
         }
-
+    
+        // Manual validation for required fields
         if (!$request->email || !$request->name || !$request->password) {
             return redirect()->route('register')->with('error', 'Missing registration info.');
         }
-
-        // Check if the email already exists in the database
-        if (User::where('email', $request->email)->first()) {
+    
+        // Check if email already exists
+        if (User::where('email', $request->email)->exists()) {
             return redirect()->route('register')->with('error', 'Email is already taken.');
         }
-
-        // Validate the form data using Laravel validation rules
-        $this->validate($request, [
+    
+        // Validate user data using Validator
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'min:5'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', 
                 Password::min(8)->numbers()->letters()->mixedCase()->symbols()],
         ]);
-
-        // Create the new user
+    
+        if ($validator->fails()) {
+            return redirect()->route('register')->withErrors($validator)->withInput();
+        }
+    
+        // Create user with default role
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Hash the password securely
+            'password' => Hash::make($request->password),
+            'role' => 'customer', // Assign default role
         ]);
-
-        // Log the user in after registration
-        Auth::login($user);
-
-        // Redirect to the home page after successful registration
-        return redirect('/');
+    
+        Auth::login($user); // Auto-login the user
+    
+        return redirect('/')->with('success', 'Registration successful!');
     }
+    
+
 
     // Show the login form
     public function login(Request $request)
