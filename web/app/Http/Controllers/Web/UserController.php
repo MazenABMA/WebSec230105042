@@ -21,6 +21,20 @@ class UserController extends Controller
         $users = $query->paginate(10);
         return view('users.index', compact('users'));
     }
+    public function profile(Request $request, User $user = null)
+{
+    $user = $user ?? auth()->user();
+
+    // Restrict access if viewing another user's profile
+    if (auth()->id() !== $user->id) {
+        if (!auth()->user()->hasPermissionTo('show_users')) {
+            abort(403, 'Unauthorized action.');
+        }
+    }
+
+    return view('users.profile', compact('user'));
+}
+
 
     // Show Create Form
     public function create()
@@ -54,8 +68,9 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => "required|email|unique:users,email,{$user->id}",
-            'password' => 'nullable|string|min:6',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:user,admin', // Ensures only valid roles
         ]);
 
         if ($request->password) {

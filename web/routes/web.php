@@ -61,6 +61,7 @@ Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('users_e
 Route::post('/users/update/{user}', [UserController::class, 'update'])->name('users_update');
 Route::get('/users/delete/{user}', [UserController::class, 'destroy'])->name('users_delete');
 
+Route::get('profile/{user?}', [UsersController::class, 'profile'])->name('profile');
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
 
