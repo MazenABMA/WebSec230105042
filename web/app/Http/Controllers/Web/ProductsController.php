@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Product; // Import the Product model
-use Illuminate\Database\Eloquent\Model; // Import the Model class
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Import the HasFactory trait
-
-
-
-
+use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    
+    // Constructor to protect routes with auth middleware
+    public function __construct()
+    {
+        $this->middleware('auth')->except('list');
+    }
+
+    // List all products with filtering
     public function list(Request $request)
     {
         // Initialize query
@@ -43,35 +43,40 @@ class ProductsController extends Controller
         // Pass filtered products to the view
         return view("products.list", compact("products"));
     }
-        public function edit(Request $request, Product $product = null) {
-        $product = $product??new Product();
-        return view("products.edit", compact('product'));
-        }
-        public function save(Request $request, Product $product = null)
-        {
-            $product = $product ?? new Product();
-    
-            // Validate request data
-            $validated = $request->validate([
-                'code' => 'required|string|max:255',
-                'name' => 'required|string|max:255',
-                'model' => 'required|string|max:255',
-                'price' => 'required|numeric',
-                'photo' => 'nullable|string',
-                'description' => 'nullable|string',
-            ]);
-    
-            // Save only the validated data
-            $product->fill($validated);
-            $product->save();
-    
-            return redirect()->route('products_list')->with('success', 'Product saved successfully!');
-        }
-        public function delete(Request $request, Product $product) {
-            $product->delete();
-            return redirect()->route('products_list');
-            }
-           
-           
 
+    // Show product edit form or create a new one
+    public function edit(Request $request, Product $product = null)
+    {
+        $product = $product ?? new Product();
+        return view("products.edit", compact('product'));
+    }
+
+    // Save product to database
+    public function save(Request $request, Product $product = null)
+    {
+        $product = $product ?? new Product();
+
+        // Validate request data
+        $validated = $request->validate([
+            'code' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'photo' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        // Save only the validated data
+        $product->fill($validated);
+        $product->save();
+
+        return redirect()->route('products_list')->with('success', 'Product saved successfully!');
+    }
+
+    // Delete a product
+    public function delete(Request $request, Product $product)
+    {
+        $product->delete();
+        return redirect()->route('products_list');
+    }
 }

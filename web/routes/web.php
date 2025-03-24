@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\GradeController;
+use App\Http\Controllers\Web\UsersController;
 
 
 // ✅ Homepage Route
@@ -47,10 +48,10 @@ Route::prefix('pages')->group(function () {
         return view('calculator');
     })->name('calculator');
 
-Route::get('products', [ProductsController::class,'list'])->name('products_list');
-Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
-Route::post('products/save/{product?}', [ProductsController::class, 'save'])->name('products_save');
-Route::get('products/delete/{product}', [ProductsController::class, 'delete'])->name('products_delete');
+    Route::get('/products', [ProductsController::class, 'list'])->name('products_list');
+    Route::get('/products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
+    Route::post('/products/save/{product?}', [ProductsController::class, 'save'])->name('products_save');
+    Route::delete('/products/{product}', [ProductsController::class, 'delete'])->name('products_delete');
 
 
 Route::get('/users', [UserController::class, 'index'])->name('users_list');
@@ -60,6 +61,13 @@ Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('users_e
 Route::post('/users/update/{user}', [UserController::class, 'update'])->name('users_update');
 Route::get('/users/delete/{user}', [UserController::class, 'destroy'])->name('users_delete');
 
+Route::get('register', [UsersController::class, 'register'])->name('register');
+Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
+
+Route::get('login', [UsersController::class, 'login'])->name('login');
+Route::post('login', [UsersController::class, 'doLogin'])->name('do_login');
+
+Route::get('logout', [UsersController::class, 'doLogout'])->name('do_logout');
 
 Route::resource('grades', GradeController::class);
 
