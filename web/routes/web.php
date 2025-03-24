@@ -8,14 +8,14 @@ use App\Http\Controllers\Web\GradeController;
 
 // ✅ Homepage Route
 Route::get('/', function () {
-    return view('app'); // Ensure you have resources/views/home.blade.php
-})->name('app');
+    return view('home'); // Ensure you have resources/views/home.blade.php
+})->name('home');
 
 // ✅ Authentication Routes (if needed)
 Auth::routes();
 
 // ✅ Dashboard/Home Route
-Route::get('/app', [App\Http\Controllers\HomeController::class, 'index'])->name('app');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // ✅ Grouped Page Routes for Organization
 Route::prefix('pages')->group(function () {
