@@ -21,7 +21,7 @@ Route::get('users/charge_credit/{user}', [UsersController::class, 'chargeCreditF
 Route::post('users/charge_credit/{user}', [UsersController::class, 'chargeCredit'])->name('charge_credit')->middleware('auth');
 
 
-
+Route::get('verify', [UsersController::class, 'verify'])->name('verify');
 
 Route::get('products', [ProductsController::class, 'list'])->name('products_list');
 Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
