@@ -20,7 +20,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('users')}}">Users</a>
             </li>
-  
             @endcan
         </ul>
         <ul class="navbar-nav">

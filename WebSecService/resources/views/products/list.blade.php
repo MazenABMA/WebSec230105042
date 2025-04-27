@@ -70,23 +70,20 @@
 					    </div>
 					    <div class="col col-2">
                             @can('edit_products')
-					        <a href="{{route('products_edit', $product->id)}}" class="btn btn form-control">Add Discount</a>
+					        <a href="{{route('products_edit', $product->id)}}" class="btn btn-success form-control">Edit</a>
                             @endcan
 					    </div>
 					    <div class="col col-2">
                             @can('delete_products')
 					        <a href="{{route('products_delete', $product->id)}}" class="btn btn-danger form-control">Delete</a>
                             @endcan
-                            
 					    </div>
-                        
                         <div class="col col-2">
                             @auth
                                 @if(auth()->user()->hasRole('Customer'))
                                     <form action="{{ route('buy_product', $product->id) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-primary">Buy</button>
-                                        
                                     </form>
                                 @endif
                             @endauth

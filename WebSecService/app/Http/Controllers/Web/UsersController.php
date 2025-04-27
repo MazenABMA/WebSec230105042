@@ -17,36 +17,6 @@ class UsersController extends Controller {
 
 	use ValidatesRequests;
 
-    public function verify(Request $request)
-    {
-        $token = $request->query('token');
-
-        if (!$token) {
-            return abort(400, 'Missing token.');
-        }
-
-        try {
-            $decrypted = Crypt::decryptString($token);
-            $data = json_decode($decrypted, true);
-
-            $user = User::where('id', $data['id'])
-                        ->where('email', $data['email'])
-                        ->first();
-
-            if (! $user) {
-                return abort(404, 'User not found.');
-            }
-
-            if (! $user->hasVerifiedEmail()) {
-                $user->markEmailAsVerified();
-            }
-
-            return redirect('/login')->with('message', 'Email verified successfully.');
-        } catch (\Exception $e) {
-            return abort(400, 'Invalid token.');
-        }
-    }
-
     public function list(Request $request)
     {
         $query = User::query();
@@ -76,7 +46,6 @@ class UsersController extends Controller {
         catch(\Exception $e) {
             return redirect()->back()->withInput($request->input())->withErrors('Invalid registration information.');
         }
-        
 
         $user = new User();
         $user->name = $request->name;
@@ -84,20 +53,13 @@ class UsersController extends Controller {
         $user->password = bcrypt($request->password);
         $user->save();
 
-        if (auth()->check() && auth()->user()->hasPermissionTo('admin_users')) {
-            $employeeRole = Role::firstOrCreate(['name' => 'Employee']);
-            $user->assignRole($employeeRole);
-        } else {
-            $customerRole = Role::firstOrCreate(['name' => 'Customer']);
-            $user->assignRole($customerRole);
-        }
-        $title = "Verification Link";
-        $token = Crypt::encryptString(json_encode(['id' => $user->id, 'email' => $user->email]));
-        $link = route("verify", ['token' => $token]);
-        Mail::to($user->email)->send(new VerificationEmail($link, $user->name));
+        // Assign default role "Customer"
+        $customerRole = Role::firstOrCreate(['name' => 'Customer']);
+        $user->assignRole($customerRole);
+
         return redirect('/');
-        
     }
+
 
     public function login(Request $request) {
         return view('users.login');
@@ -107,10 +69,6 @@ class UsersController extends Controller {
     	
     	if(!Auth::attempt(['email' => $request->email, 'password' => $request->password]))
             return redirect()->back()->withInput($request->input())->withErrors('Invalid login information.');
-            $user = User::where('email', $request->email)->first();
-            if(!$user->email_verified_at)
-            return redirect()->back()->withInput($request->input())
-            ->withErrors('Your email is not verified.');
 
         $user = User::where('email', $request->email)->first();
         Auth::setUser($user);

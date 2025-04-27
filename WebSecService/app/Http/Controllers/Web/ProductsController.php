@@ -37,23 +37,12 @@ class ProductsController extends Controller {
 
 		return view('products.list', compact('products'));
 	}
-	public function manage_discounts(request $request,Product $product){
 
-		if(!auth()->user()->hasPermissionTo('manage_discounts')) abort(401);
-		$query = Product::select("products.*");
-		
-		$query->when($request->price,
-		fn($q)=> $q->where("price" * "discounts",  $request ));
-
-
-
-		$product->manage_discounts;
-	
-		}
-	
 	public function edit(Request $request, Product $product = null) {
 
 		if(!auth()->user()) return redirect('/');
+
+		$product = $product??new Product();
 
 		return view('products.edit', compact('product'));
 	}
@@ -76,9 +65,6 @@ class ProductsController extends Controller {
 
 		return redirect()->route('products_list');
 	}
-
-	
-
 
 	public function delete(Request $request, Product $product) {
 
