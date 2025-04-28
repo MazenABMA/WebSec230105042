@@ -82,12 +82,7 @@ Mail::to($user->email)->send(new VerificationEmail($link, $user->name));
     
         $user = User::where('email', $request->email)->first();
     
-        if (!$user->email_verified_at) {
-            Auth::logout(); // Optional: make sure the session is cleared
-            return redirect()->back()->withInput($request->input())
-                ->withErrors('Your email is not verified.');
-        }
-    
+      
         Auth::setUser($user);
     
         return redirect('/');

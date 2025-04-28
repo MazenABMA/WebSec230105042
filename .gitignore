@@ -1,3 +1,4 @@
 WebSecService/.env.example
 /WebSecService/config
 WebSecService/routes/web.php
+WebSecService/config/mail.php
