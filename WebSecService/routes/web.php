@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Mail;
 
 
 use App\Http\Controllers\Web\AuthController;
+Route::get('/auth/github', [UsersController::class, 'redirectToGitHub']);
+Route::get('/auth/github/callback', [UsersController::class, 'handleGitHubCallback']);
 
-
-
+Route::get('auth/facebook', [AuthController::class, 'redirectToFacebook']);
+Route::get('auth/facebook/callback', [AuthController::class, 'handleFacebookCallback']);
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
 Route::get('login', [UsersController::class, 'login'])->name('login');
@@ -29,6 +31,8 @@ Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
 
+Route::get('/auth/facebook', [UsersController::class, 'redirectToFacebook']);
+Route::get('/auth/facebook/callback', [UsersController::class, 'handleFacebookCallback']);
 Route::get('test-email', function () {
 
     Mail::raw('This is a test email sent to the same email address.', function ($message) {
