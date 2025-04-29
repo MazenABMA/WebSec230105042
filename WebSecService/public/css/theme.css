@@ -1,25 +1,41 @@
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
+    --button-bg-color: #000000;
+    --button-text-color: #ffffff;
 }
 
 [data-theme="dark"] {
     --bg-color: #1e1e1e;
     --text-color: #ffffff;
+    --button-bg-color: #ffffff;
+    --button-text-color: #000000;
 }
 
+/* Apply the colors to the body */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
-    background-color: var(--text-color);
-    color: var(--bg-color);
-    border: 1px solid var(--text-color);
-    border-radius: 5px;
+/* Style for the dark mode toggle button */
+#darkModeToggle {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: 1px solid var(--button-bg-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#darkModeToggle:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Design: Adjustments for smaller screens */
+@media (max-width: 768px) {
+    #darkModeContainer {
+        bottom: 10px;
+        right: 10px;
+    }
 }
