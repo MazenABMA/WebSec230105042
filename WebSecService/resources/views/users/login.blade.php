@@ -1,56 +1,65 @@
 @extends('layouts.master')
 @section('title', 'Login')
 @section('content')
-<div class="d-flex justify-content-center">
-  <div class="card m-4 col-sm-6">
-    <div class="card-body">
-      <form action="{{route('do_login')}}" method="post">
+
+<!-- Include Bootstrap Icons (Optional for logos) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 420px;">
+    <h3 class="mb-4 text-center">Login</h3>
+    
+    <form action="{{ route('do_login') }}" method="POST">
       {{ csrf_field() }}
 
-      {{-- Display Errors --}}
-      <div class="form-group">
-        @foreach($errors->all() as $error)
-          <div class="alert alert-danger">
-            <strong>Error!</strong> {{$error}}
-          </div>
-        @endforeach
-      </div>
+      {{-- Display Validation Errors --}}
+      @foreach($errors->all() as $error)
+        <div class="alert alert-danger">
+          <strong>Error:</strong> {{ $error }}
+        </div>
+      @endforeach
 
       {{-- Email Input --}}
-      <div class="form-group mb-2">
-        <label for="model" class="form-label">Email :</label>
-        <input type="email" class="form-control" placeholder="email" name="email" required>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
       </div>
 
       {{-- Password Input --}}
-      <div class="form-group mb-2">
-        <label for="model" class="form-label">Password:</label>
-        <input type="password" class="form-control" placeholder="password" name="password" required>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" class="form-control" name="password" placeholder="••••••••" required>
       </div>
 
-      <div class="form-group mb-2">
-  <button type="submit" class="btn" style="background-color: black; color: white; width: 100%;">Login</button>
-</div>
+      {{-- Submit Button --}}
+      <div class="mb-3">
+        <button type="submit" class="btn btn-dark w-100">Login</button>
+      </div>
 
-<div class="form-group mb-2 text-center d-flex justify-content-around">
-  {{-- Google Login Button --}}
-  <a href="{{ url('auth/google') }}" class="btn" style="background-color: white; color: #d9534f; border: 1px solid #d9534f; display: flex; align-items: center; gap: 5px;">
-    <span style="font-size: 14px;">Login with Google</span>
-  </a>
+      {{-- Divider --}}
+      <div class="text-center my-3 text-muted">
+        or continue with
+      </div>
 
-  {{-- Facebook Login Button --}}
-  <a href="{{ url('auth/facebook') }}" class="btn btn-primary" style="display: flex; align-items: center; gap: 5px;">
-    <span style="font-size: 14px;">Login with Facebook</span>
-  </a>
-  <a href="{{ url('/auth/github') }}" class="btn btn-dark w-100 mb-2">
-    Login with GitHub
-</a>
- 
+      {{-- Social Login Buttons --}}
+      <div class="d-grid gap-2">
+        {{-- Google --}}
+        <a href="{{ url('auth/google') }}" class="btn btn-outline-danger d-flex align-items-center justify-content-center">
+          <i class="bi bi-google me-2"></i> Login with Google
+        </a>
 
+        {{-- Facebook --}}
+        <a href="{{ url('auth/facebook') }}" class="btn btn-outline-primary d-flex align-items-center justify-content-center">
+          <i class="bi bi-facebook me-2"></i> Login with Facebook
+        </a>
 
-</div>
+        {{-- GitHub --}}
+        <a href="{{ url('/auth/github') }}" class="btn btn-outline-dark d-flex align-items-center justify-content-center">
+          <i class="bi bi-github me-2"></i> Login with GitHub
+        </a>
+      </div>
     </form>
-    </div>
   </div>
 </div>
+
 @endsection
