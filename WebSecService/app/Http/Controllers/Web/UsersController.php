@@ -40,34 +40,37 @@ class UsersController extends Controller {
     }
 
     public function doRegister(Request $request) {
-
-        try {
-            $this->validate($request, [
+        // Validate user input
+        $this->validate($request, [
             'name' => ['required', 'string', 'min:5'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)],
-            ]);
-        }
-        catch(\Exception $e) {
-            return redirect()->back()->withInput($request->input())->withErrors('Invalid registration information.');
-        }
-
+        ]);
+    
+        // Create new user
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = bcrypt($request->password); // Secure password
         $user->save();
-
-        // Assign default role "Customer"
+    
+        // Assign default role
         $customerRole = Role::firstOrCreate(['name' => 'Customer']);
         $user->assignRole($customerRole);
-        $title = "Verification Link";
-$token = Crypt::encryptString(json_encode(['id' => $user->id, 'email' => $user->email]));
-$link = route("verify", ['token' => $token]);
-Mail::to($user->email)->send(new VerificationEmail($link, $user->name));
-
-
-        return redirect('/');
+    
+        // Generate verification token
+        $token = Crypt::encryptString(json_encode([
+            'id' => $user->id,
+            'email' => $user->email
+        ]));
+    
+        // Generate verification link
+        $link = route('verify', ['token' => $token]);
+    
+        // Send email
+        Mail::to($user->email)->send(new VerificationEmail($link, $user->name));
+    
+        return redirect('/')->with('success', 'Registration successful! Please check your email to verify your account.');
     }
 
 
@@ -293,5 +296,6 @@ public function handleGitHubCallback() {
 
     return redirect('/');
 }
+
 
 } 

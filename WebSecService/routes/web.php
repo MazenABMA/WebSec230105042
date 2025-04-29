@@ -30,7 +30,7 @@ Route::post('users/charge_credit/{user}', [UsersController::class, 'chargeCredit
 Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
-
+Route::get('verify', [UsersController::class, 'verify'])->name('verify');
 Route::get('/auth/facebook', [UsersController::class, 'redirectToFacebook']);
 Route::get('/auth/facebook/callback', [UsersController::class, 'handleFacebookCallback']);
 Route::get('test-email', function () {
