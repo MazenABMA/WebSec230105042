@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Mail;
 
 
 use App\Http\Controllers\Web\AuthController;
+
+
+Route::get('auth/facebook', [AuthController::class, 'redirectToFacebook']);
+Route::get('auth/facebook/callback', [AuthController::class, 'handleFacebookCallback']);
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
 Route::get('login', [UsersController::class, 'login'])->name('login');

@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Laravel\Socialite\Facades\Socialite;
+use Socialite;
+
+
 
 class AuthController extends Controller
 {
@@ -36,4 +38,29 @@ class AuthController extends Controller
 
         return redirect('/');
     }
+    public function redirectToFacebook()
+{
+    return Socialite::driver('facebook')->redirect();
+}
+
+public function handleFacebookCallback()
+{
+    $facebookUser = Socialite::driver('facebook')->stateless()->user();
+
+    $user = User::where('facebook_id', $facebookUser->id)->first();
+
+    if ($user) {
+        Auth::login($user);
+    } else {
+        $user = User::create([
+            'name' => $facebookUser->name,
+            'email' => $facebookUser->email,
+            'facebook_id' => $facebookUser->id,
+            'password' => bcrypt('facebook-temp-pass'),
+        ]);
+        Auth::login($user);
+    }
+
+    return redirect('/');
+}
 }
