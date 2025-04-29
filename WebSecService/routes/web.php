@@ -52,7 +52,7 @@ Route::get('products/delete/{product}', [ProductsController::class, 'delete'])->
 Route::post('/buy/{product}', [ProductsController::class, 'buy'])->name('buy_product')->middleware('auth');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/multable', function (Request $request) {

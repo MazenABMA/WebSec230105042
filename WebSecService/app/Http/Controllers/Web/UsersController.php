@@ -73,7 +73,7 @@ class UsersController extends Controller {
         return redirect('/')->with('success', 'Registration successful! Please check your email to verify your account.');
     }
 
-
+    // Removed duplicate verify method to resolve redeclaration error.
     public function login(Request $request) {
         return view('users.login');
     }
@@ -84,9 +84,12 @@ class UsersController extends Controller {
             return redirect()->back()->withInput($request->input())->withErrors('Invalid login information.');
         }
     
-        $user = User::where('email', $request->email)->first();
+        
     
-      
+        $user = User::where('email', $request->email)->first();
+        if(!$user->email_verified_at)
+        return redirect()->back()->withInput($request->input())
+        ->withErrors('Your email is not verified.');
         Auth::setUser($user);
     
         return redirect('/');
@@ -127,6 +130,8 @@ class UsersController extends Controller {
         $user->save();
         return view('users.verified', compact('user'));
         }
+
+
     public function edit(Request $request, User $user = null) {
    
         $user = $user??auth()->user();
