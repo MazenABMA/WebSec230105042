@@ -30,6 +30,8 @@ Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
 
+Route::get('/auth/facebook', [UsersController::class, 'redirectToFacebook']);
+Route::get('/auth/facebook/callback', [UsersController::class, 'handleFacebookCallback']);
 Route::get('test-email', function () {
 
     Mail::raw('This is a test email sent to the same email address.', function ($message) {

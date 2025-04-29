@@ -16,6 +16,7 @@ use App\Mail\VerificationEmail;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
+use Laravel\Socialite\Facades\Socialite;
 
 class UsersController extends Controller {
 
@@ -243,4 +244,36 @@ Mail::to($user->email)->send(new VerificationEmail($link, $user->name));
         return redirect()->route('charge_credit_form', $user->id)
                          ->with('success', 'Credit charged successfully!');
     }
+
+
+    public function redirectToFacebook()
+{
+    return Socialite::driver('facebook')->redirect();
+}
+
+// Handle callback from Facebook
+public function handleFacebookCallback()
+{
+    try {
+        $facebookUser = Socialite::driver('facebook')->stateless()->user();
+
+        $user = User::where('email', $facebookUser->getEmail())->first();
+
+        if (!$user) {
+            // Register the user if not already present
+            $user = User::create([
+                'name' => $facebookUser->getName(),
+                'email' => $facebookUser->getEmail(),
+                'password' => bcrypt(Str::random(16)) // Set random password
+            ]);
+
+            $user->assignRole('Customer');
+        }
+
+        Auth::login($user);
+        return redirect('/');
+    } catch (\Exception $e) {
+        return redirect()->route('login')->withErrors('Unable to login with Facebook.');
+    }
+}
 } 
