@@ -17,7 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Socialite\Facades\Socialite;
-
+use Illuminate\Support\Str;
 class UsersController extends Controller {
 
 	use ValidatesRequests;
