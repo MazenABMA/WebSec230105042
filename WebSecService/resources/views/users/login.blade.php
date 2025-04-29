@@ -32,13 +32,22 @@
       <div class="form-group mb-2">
         <button type="submit" class="btn btn-primary w-100">Login</button>
       </div>
-
- 
-
-      <div class="form-group mb-2 text-center">
-    <a href="{{ url('auth/google') }}" class="btn btn-danger w-20" style="display: flex; align-items: center; justify-content: center; gap: 2px;">
+      <div class="form-group mb-2 text-center d-flex justify-content-around">
+    {{-- Google Login Button --}}
+    <a href="{{ url('auth/google') }}" class="btn btn-danger" style="display: flex; align-items: center; gap: 5px;">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="Google">
         <span style="font-size: 14px;">Login with Google</span>
     </a>
+
+    {{-- Facebook Login Button --}}
+    <a href="{{ url('auth/facebook') }}" class="btn btn-primary" style="display: flex; align-items: center; gap: 5px;">
+        <img src="https://www.svgrepo.com/show/475645/facebook-color.svg" width="20" height="20" alt="Facebook">
+        <span style="font-size: 14px;">Login with Facebook</span>
+    </a>
+</div>
+ 
+
+
 </div>
     </form>
     </div>
