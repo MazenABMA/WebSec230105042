@@ -293,4 +293,5 @@ public function handleGitHubCallback() {
 
     return redirect('/');
 }
+
 } 
