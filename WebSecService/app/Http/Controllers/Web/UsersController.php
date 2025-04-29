@@ -276,4 +276,21 @@ public function handleFacebookCallback()
         return redirect()->route('login')->withErrors('Unable to login with Facebook.');
     }
 }
+public function redirectToGitHub() {
+    return Socialite::driver('github')->redirect();
+}
+
+public function handleGitHubCallback() {
+    $githubUser = Socialite::driver('github')->stateless()->user();
+
+    // Find or create user
+    $user = \App\Models\User::firstOrCreate(
+        ['email' => $githubUser->getEmail()],
+        ['name' => $githubUser->getName() ?? $githubUser->getNickname()]
+    );
+
+    Auth::login($user);
+
+    return redirect('/');
+}
 } 

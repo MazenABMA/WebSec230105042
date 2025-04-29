@@ -42,8 +42,9 @@
   <a href="{{ url('auth/facebook') }}" class="btn btn-primary" style="display: flex; align-items: center; gap: 5px;">
     <span style="font-size: 14px;">Login with Facebook</span>
   </a>
-</div>
-</div>
+  <a href="{{ url('/auth/github') }}" class="btn btn-dark w-100 mb-2">
+    Login with GitHub
+</a>
  
 
 
